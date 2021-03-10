@@ -64,8 +64,6 @@ class MicNoiseLevelPlugin: FlutterPlugin, RequestPermissionsResultListener, Even
 
   /// Called from Flutter, starts the stream
   override fun onListen(arguments: Any?, events: EventSink?) {
-    Log.w("MicNoiseLevel", "onListen()")
-
     this._timer = Timer()
     this.eventSink = events
     initAudioRecorder()
@@ -74,8 +72,6 @@ class MicNoiseLevelPlugin: FlutterPlugin, RequestPermissionsResultListener, Even
 
   /// Called from Flutter, cancels the stream
   override fun onCancel(arguments: Any?) {
-    Log.w("MicNoiseLevel", "onCancel()")
-
     this._timer?.cancel()
     this._timer?.purge()
     this._timer = null
@@ -101,8 +97,6 @@ class MicNoiseLevelPlugin: FlutterPlugin, RequestPermissionsResultListener, Even
   }
 
   private fun initAudioRecorder() {
-    Log.w("MicNoiseLevel", "initAudioRecorder()")
-
     this.recorder = MediaRecorder()
       this.recorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
       this.recorder?.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
@@ -122,8 +116,6 @@ internal class MaxAmplitudeTask(private val recorder: MediaRecorder?, private va
   var prevAmplitude: Int = 0
 
   override fun run() {
-    Log.w("MicNoiseLevel", "run()")
-
     Handler(Looper.getMainLooper()).post {
       var maxAmplitude = this.recorder?.maxAmplitude
 

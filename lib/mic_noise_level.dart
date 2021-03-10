@@ -69,14 +69,12 @@ class MicNoiseLevel {
   Future<Stream<double>> start(
       DataHandler dataHandler, ErrorHandler errorHandler) async {
     if (_isMeasuring) {
-      print('MicNoiseLevel: Already measuring moise level');
       return _stream;
     }
 
     final granted = await checkPermission();
 
     if (!granted) {
-      print('MicNoiseLevel: Requesting permission to use mic');
       await requestPermission();
       start(dataHandler, errorHandler);
     }
@@ -101,7 +99,7 @@ class MicNoiseLevel {
 
       _isMeasuring = false;
     } catch (err) {
-      debugPrint('AudioStreamer: stopRecorder() error: $err');
+      debugPrint('MicNoiseLevel: stopRecorder() error: $err');
     }
 
     return _isMeasuring;
