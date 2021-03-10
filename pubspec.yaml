@@ -1,0 +1,27 @@
+name: mic_noise_level
+description: Plugin for getting noise level using phones microphone.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.20.0 <2.0.0"
+
+dependencies:
+  permission_handler: ^5.1.0+2
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.klinge.daniels.mic_noise_level
+        pluginClass: MicNoiseLevelPlugin
+      ios:
+        pluginClass: SwiftMicNoiseLevelPlugin
