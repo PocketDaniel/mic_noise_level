@@ -13,8 +13,8 @@ typedef ErrorHandler = void Function(dynamic error);
 
 class MicNoiseLevel {
   bool _isMeasuring = false;
-  Stream<double> _stream;
-  StreamSubscription<dynamic> _subscription;
+  Stream<double>? _stream;
+  StreamSubscription<dynamic>? _subscription;
 
   static const EventChannel _micNoiseLevelChannel =
       const EventChannel(EVENT_CHANNEL_NAME);
@@ -34,7 +34,7 @@ class MicNoiseLevel {
   // Stream initialization
   //----------------------------------------------------------------------------
 
-  void _createNoiseStream(ErrorHandler errorHandler) {
+  void _createNoiseStream(ErrorHandler? errorHandler) {
     if (_stream == null) {
       _stream = _micNoiseLevelChannel
           .receiveBroadcastStream()
@@ -47,7 +47,7 @@ class MicNoiseLevel {
   // Handlers
   //----------------------------------------------------------------------------
 
-  void _onError(dynamic error, ErrorHandler errorHandler) {
+  void _onError(dynamic error, ErrorHandler? errorHandler) {
     _isMeasuring = false;
     _stream = null;
     if (errorHandler != null) {
@@ -55,7 +55,7 @@ class MicNoiseLevel {
     }
   }
 
-  void _onData(double data, DataHandler dataHandler) {
+  void _onData(double data, DataHandler? dataHandler) {
     // NOTE: Additional transformation can be applied here if needed
     if (dataHandler != null) {
       dataHandler(data);
@@ -67,9 +67,9 @@ class MicNoiseLevel {
   //----------------------------------------------------------------------------
 
   Future<Stream<double>> start(
-      DataHandler dataHandler, ErrorHandler errorHandler) async {
+      DataHandler? dataHandler, ErrorHandler? errorHandler) async {
     if (_isMeasuring) {
-      return _stream;
+      return _stream!;
     }
 
     final granted = await checkPermission();
@@ -81,21 +81,19 @@ class MicNoiseLevel {
 
     try {
       _createNoiseStream(errorHandler);
-      _subscription = _stream.listen((data) => _onData(data, dataHandler));
+      _subscription = _stream!.listen((data) => _onData(data, dataHandler));
       _isMeasuring = true;
     } catch (err) {
       debugPrint('MicNoiseLevel: start() error: $err');
     }
 
-    return _stream;
+    return _stream!;
   }
 
   Future<bool> stop() async {
     try {
-      if (_subscription != null) {
-        _subscription.cancel();
-        _subscription = null;
-      }
+      _subscription?.cancel();
+      _subscription = null;
 
       _isMeasuring = false;
     } catch (err) {
