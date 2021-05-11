@@ -1,6 +1,6 @@
 name: mic_noise_level
 description: Plugin for getting noise level using phones microphone.
-version: 0.0.1
+version: 0.0.2
 author:
 homepage:
 
