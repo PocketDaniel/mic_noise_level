@@ -73,12 +73,12 @@ class MicNoiseLevelPlugin: FlutterPlugin, RequestPermissionsResultListener, Even
   /// Called from Flutter, cancels the stream
   override fun onCancel(arguments: Any?) {
     this._timer?.cancel()
-    this._timer?.purge()
-    this._timer = null
-    this.eventSink = null
-    this.recorder?.stop()
-    this.recorder?.release()
-    this.recorder = null
+    // this._timer?.purge()
+    // this._timer = null
+    // this.eventSink = null
+    // this.recorder?.stop()
+    // this.recorder?.release()
+    // this.recorder = null
   }
 
   //----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ internal class MaxAmplitudeTask(private val recorder: MediaRecorder?, private va
   var prevAmplitude: Int = 0
 
   override fun run() {
-    Handler(Looper.getMainLooper()).post {
+    Handler(Looper.getMainLooper()).post {      
       var maxAmplitude = this.recorder?.maxAmplitude
 
       if(maxAmplitude !== null) {
