@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -13,8 +12,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
 import io.flutter.plugin.common.PluginRegistry.RequestPermissionsResultListener
-import java.util.Timer
-import java.util.TimerTask
+import java.util.*
 
 private const val MAX_AMPLITUDE = 32767
 private const val EVENT_CHANNEL_NAME = "mic_noise_level.eventChannel"
@@ -98,16 +96,20 @@ class MicNoiseLevelPlugin: FlutterPlugin, RequestPermissionsResultListener, Even
 
   private fun initAudioRecorder() {
     this.recorder = MediaRecorder()
-      this.recorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
-      this.recorder?.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-      this.recorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-      this.recorder?.setAudioSamplingRate(SAMPLE_RATE)
-      this.recorder?.setAudioChannels(1)
-      this.recorder?.setOutputFile("/dev/null")
-      this.recorder?.prepare()
-      this.recorder?.start()
 
-      this._timer?.schedule(MaxAmplitudeTask(this.recorder, this.eventSink), 0, 10)
+    val property = "java.io.tmpdir"
+    val tempDir = System.getProperty(property)
+
+    this.recorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
+    this.recorder?.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+    this.recorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+    this.recorder?.setAudioSamplingRate(SAMPLE_RATE)
+    this.recorder?.setAudioChannels(1)
+    this.recorder?.setOutputFile("$tempDir/voice.tmp")
+    this.recorder?.prepare()
+    this.recorder?.start()
+
+    this._timer?.schedule(MaxAmplitudeTask(this.recorder, this.eventSink), 0, 10)
   }
 }
 

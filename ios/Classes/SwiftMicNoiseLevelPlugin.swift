@@ -33,7 +33,9 @@ public class SwiftMicNoiseLevelPlugin: NSObject, FlutterPlugin, FlutterStreamHan
     }
     
     @objc func handleInterruption(notification: Notification) {
-        eventSink!(FlutterError(code: "100", message: "Recording was interrupted", details: "Another process interrupted recording."))
+        if let _eventSink = eventSink {
+            _eventSink(FlutterError(code: "100", message: "Recording was interrupted", details: "Another process interrupted recording."))
+        }
     }
     
     //---------------------------------------------------------------------------------
